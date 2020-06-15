@@ -1,0 +1,175 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler 
+import matplotlib.pyplot as plt
+import numpy as np
+import statistics
+import xlsxwriter
+import csv
+import random as rd
+from datetime import datetime
+import datetime
+from datetime import date
+from xlwt import Workbook 
+import random
+from dateutil.relativedelta import relativedelta
+from openpyxl import Workbook
+from openpyxl import load_workbook
+
+#mes a mes, até dezembro
+aneiro = pd.read_excel("SIMULADOR - GERADOR DE DADOS - EQUATORIAL.xlsx", sheet_name=0)
+janeiro = pd.DataFrame(janeiro)
+janeiro.columns = [0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                   25, 26, 27,28, 29, 30, 31, 32, 33, 34, 35, 36,37, 38, 39,40, 41, 42, 43, 44, 45, 46, 47,
+                   48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,62]
+#df.to_dict()  Dicionário das colunas
+
+#tabela_geral = pd.read_excel("SIMULADOR - GERADOR DE DADOS - EQUATORIAL.xlsx", sheet_name=None)# Tabela geral de todos os dados
+
+#ainda serão modificados algumas coisas
+
+df2 = pd.read_excel("SIMULADOR - GERADOR DE DADOS - EQUATORIAL.xlsx", sheet_name=13, skiprows=[0], parse_date=['DATA'])
+#df2 = df2.loc[0:df2.shape[0], "DATA"],["Valor"]
+#dp = pd.DataFrame(df2,columns = ['DATA'])
+df3 = pd.DataFrame(df2)
+df3
+
+df4 = df2.loc[0:167, ["Valor","Variação", "Valor.1","Variação.1","Valor.2","Variação.2","Valor.3","Variação.3","Valor.4","Variação.4",
+                     "Valor.5","Variação.5","Valor.6","Variação.6","Valor.7","Variação.7","Valor.8","Variação.8","Valor.9","Variação.9",
+                     "Valor.10","Variação.10","Valor.11","Variação.11","Valor.12","Variação.12","Valor.13","Variação.13","Valor.14","Variação.14",
+                     "Valor.15","Variação.15","Valor.16","Variação.16","Valor.17","Variação.17","Valor.18","Variação.18","Valor.19","Variação.19",
+                     "Valor.20","Variação.20","Valor.21","Variação.21","Valor.22","Variação.22","Valor.23","Variação.23","Valor.24","Variação.24",
+                     "Valor.25","Variação.25","Valor.26","Variação.26","Valor.27","Variação.27","Valor.28","Variação.28","Valor.29","Variação.29",
+                      "Valor.30","Variação.30"]]
+#normalização
+scaler = StandardScaler()
+normaliza=scaler.fit_transform(df4) 
+#transformar array em DataFrame
+df5 = pd.DataFrame(normaliza)
+#nomeando as colunas 
+df5.columns = ["Valor","Variação", "Valor.1","Variação.1","Valor.2","Variação.2","Valor.3","Variação.3","Valor.4","Variação.4",
+                     "Valor.5","Variação.5","Valor.6","Variação.6","Valor.7","Variação.7","Valor.8","Variação.8","Valor.9","Variação.9",
+                     "Valor.10","Variação.10","Valor.11","Variação.11","Valor.12","Variação.12","Valor.13","Variação.13","Valor.14","Variação.14",
+                     "Valor.15","Variação.15","Valor.16","Variação.16","Valor.17","Variação.17","Valor.18","Variação.18","Valor.19","Variação.19",
+                     "Valor.20","Variação.20","Valor.21","Variação.21","Valor.22","Variação.22","Valor.23","Variação.23","Valor.24","Variação.24",
+                     "Valor.25","Variação.25","Valor.26","Variação.26","Valor.27","Variação.27","Valor.28","Variação.28","Valor.29","Variação.29",
+                      "Valor.30","Variação.30"]
+def N_Col(local, nomecoluna):
+    a = df5.insert(local, nomecoluna, 0.0)
+    return a;
+col_pond= N_Col(2, "Ponderação"), N_Col(5, "Ponderação.1"), N_Col(8, "Ponderação.2"), N_Col(11, "Ponderação.3"),N_Col(14, "Ponderação.4"),
+N_Col(17, "Ponderação.5"),N_Col(20, "Ponderação.6"),N_Col(23, "Ponderação.7"),N_Col(26, "Ponderação.8"),N_Col(29, "Ponderação.9"),
+N_Col(32, "Ponderação.10"),N_Col(35, "Ponderação.11"),N_Col(38, "Ponderação.12"),N_Col(41, "Ponderação.13"),N_Col(44, "Ponderação.14"),
+N_Col(47, "Ponderação.15"),N_Col(50, "Ponderação.16"),N_Col(53, "Ponderação.17"),N_Col(56, "Ponderação.18"),N_Col(59, "Ponderação.19"),
+N_Col(62, "Ponderação.20"),N_Col(65, "Ponderação.21"),N_Col(68, "Ponderação.22"),N_Col(71, "Ponderação.23"),N_Col(74, "Ponderação.24"),
+N_Col(77, "Ponderação.25"),N_Col(80, "Ponderação.26"),N_Col(83, "Ponderação.27"),N_Col(86, "Ponderação.28"),N_Col(89, "Ponderação.29"),
+N_Col(92, "Ponderação.30")
+
+jan_dados=[]
+fev_dados=[]
+mar_dados=[]
+abr_dados=[]
+mai_dados=[]
+jun_dados=[]
+jul_dados=[]
+ago_dados=[]
+set_dados=[]
+out_dados=[]
+nov_dados=[]
+dez_dados=[]
+for i in df5:
+    jan = slice(0, 168,12)
+    jan_dados.append(df5[jan])
+    #Dados de Janeiro
+    fev = slice(1, 168,12)
+    fev_dados.append(df5[fev])
+    #Dados de Fevereiro
+    mar = slice(2, 168,12)
+    mar_dados.append(df5[mar])
+    #Dados de Março
+    abr = slice(3, 168,12)
+    abr_dados.append(df5[abr])
+    #Dados de Abril
+    mai = slice(4, 168,12)
+    mai_dados.append(df5[mai])
+    #Dados de Maio
+    jun = slice(5, 168,12)
+    jun_dados.append(df5[jun])
+    #Dados de Junho
+    jul = slice(6, 168,12)
+    jul_dados.append(df5[jul])
+    #Dados de Julho
+    ago = slice(7, 168,12)
+    ago_dados.append(df5[ago])
+    #Dados de Agosto
+    set = slice(8, 168,12)
+    set_dados.append(df5[set])
+    #Dados de Setembro
+    out = slice(9, 168,12)
+    out_dados.append(df5[out])
+    #Dados de Outubro
+    nov = slice(10, 168,12)
+    nov_dados.append(df5[nov])
+    #Dados de Novembro
+    dez = slice(11, 168,12)
+    dez_dados.append(df5[dez])
+    #Dados de Dezembro
+    break;
+df=jan_dados, fev_dados, mar_dados, abr_dados, mai_dados, jun_dados, jul_dados, ago_dados, set_dados, out_dados, nov_dados, dez_dados
+
+r = rd.uniform(0.500,1.500) #gera um numero aleatório entre 0,500 à 1,500
+
+#for i in range(0, len(jan_dados), 1):
+def listdf(mesdereferencia):
+    meses = pd.DataFrame(mesdereferencia[0])
+    return meses;
+mesesdf= (listdf(jan_dados), listdf(fev_dados), listdf(mar_dados), listdf(abr_dados), listdf(mai_dados),listdf(jun_dados),
+          listdf(jul_dados), listdf(ago_dados), listdf(set_dados), listdf(out_dados), listdf(nov_dados),listdf(dez_dados))
+
+jan = mesesdf[0].loc[0:200], janeiro
+fev = mesesdf[1].loc[0:200], fevereiro
+mar = mesesdf[2].loc[0:200], marco
+abr = mesesdf[3].loc[0:200], abril
+mai = mesesdf[4].loc[0:200], maio
+jun = mesesdf[5].loc[0:200], junho
+jul = mesesdf[6].loc[0:200], julho
+ago = mesesdf[7].loc[0:200], agosto
+set = mesesdf[8].loc[0:200], setembro
+out = mesesdf[9].loc[0:200], outubro
+nov = mesesdf[10].loc[0:200], novembro
+dez = mesesdf[11].loc[0:200], dezembro
+
+
+#para modificar a coluna ponderação
+mesesdf[0].reset_index(level=0, inplace=True)
+del mesesdf[0]['index']
+mesesdf[0]['Ponderação'] = (janeiro[0] + mesesdf[0]['Variação']) * r
+mesesdf[0]['Ponderação.1'] = (janeiro[1] + mesesdf[0]['Variação.1']) * r
+mesesdf[0]['Ponderação.2'] = (janeiro[2] + mesesdf[0]['Variação.2']) * r
+mesesdf[0]['Ponderação.3'] = (janeiro[3] + mesesdf[0]['Variação.3']) * r
+mesesdf[0]['Ponderação.4'] = (janeiro[4] + mesesdf[0]['Variação.4']) * r
+mesesdf[0]['Ponderação.5'] = (janeiro[5] + mesesdf[0]['Variação.5']) * r
+mesesdf[0]['Ponderação.6'] = (janeiro[6] + mesesdf[0]['Variação.6']) * r
+mesesdf[0]['Ponderação.7'] = (janeiro[7] + mesesdf[0]['Variação.7']) * r
+mesesdf[0]['Ponderação.8'] = (janeiro[8] + mesesdf[0]['Variação.8']) * r
+mesesdf[0]['Ponderação.9'] = (janeiro[9] + mesesdf[0]['Variação.9']) * r
+mesesdf[0]['Ponderação.10'] = (janeiro[10] + mesesdf[0]['Variação.10']) * r
+mesesdf[0]['Ponderação.11'] = (janeiro[11] + mesesdf[0]['Variação.11']) * r
+mesesdf[0]['Ponderação.12'] = (janeiro[12] + mesesdf[0]['Variação.12']) * r 
+mesesdf[0]['Ponderação.13'] = (janeiro[13] + mesesdf[0]['Variação.13']) * r
+mesesdf[0]['Ponderação.14'] = (janeiro[14] + mesesdf[0]['Variação.14']) * r
+mesesdf[0]['Ponderação.15'] = (janeiro[15] + mesesdf[0]['Variação.15']) * r
+mesesdf[0]['Ponderação.16'] = (janeiro[16] + mesesdf[0]['Variação.16']) * r
+mesesdf[0]['Ponderação.17'] = (janeiro[17] + mesesdf[0]['Variação.17']) * r
+mesesdf[0]['Ponderação.18'] = (janeiro[18] + mesesdf[0]['Variação.18']) * r
+mesesdf[0]['Ponderação.19'] = (janeiro[19] + mesesdf[0]['Variação.19']) * r
+mesesdf[0]['Ponderação.20'] = (janeiro[20] + mesesdf[0]['Variação.20']) * r
+mesesdf[0]['Ponderação.21'] = (janeiro[21] + mesesdf[0]['Variação.21']) * r
+mesesdf[0]['Ponderação.22'] = (janeiro[22] + mesesdf[0]['Variação.22']) * r
+mesesdf[0]['Ponderação.23'] = (janeiro[23] + mesesdf[0]['Variação.23']) * r
+mesesdf[0]['Ponderação.24'] = (janeiro[24] + mesesdf[0]['Variação.24']) * r
+mesesdf[0]['Ponderação.25'] = (janeiro[25] + mesesdf[0]['Variação.25']) * r
+mesesdf[0]['Ponderação.26'] = (janeiro[26] + mesesdf[0]['Variação.26']) * r
+mesesdf[0]['Ponderação.27'] = (janeiro[27] + mesesdf[0]['Variação.27']) * r
+mesesdf[0]['Ponderação.28'] = (janeiro[28] + mesesdf[0]['Variação.28']) * r
+mesesdf[0]['Ponderação.29'] = (janeiro[29] + mesesdf[0]['Variação.29']) * r
+mesesdf[0]['Ponderação.30'] = (janeiro[30] + mesesdf[0]['Variação.30']) * r
